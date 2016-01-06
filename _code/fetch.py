@@ -1,5 +1,6 @@
 import requests
 import base64
+import json
 
 import config
 import ndio.remote.OCP as OCP
@@ -68,3 +69,22 @@ def get_claims_for_token(token):
     """
     return [i['name'] for i in get_json(token)
             if i['name'] not in config.IGNORE_FILES]
+
+
+def get_claim_and_result_tuple(token, claimfile):
+    """
+    Gets the claim and the result of the notebook (the last text-line).
+
+    Arguments:
+        token (str): The token to inspect
+        claimfile (str): The name of the file (including ext) to read
+
+    Returns:
+        (str, str): The claim and its result, in string form.
+    """
+    cells = json.loads(get_file_contents(token + "/" + claimfile))['cells']
+
+    return (
+        cells[0]['source'][0],
+        cells[-1]['outputs'][0]['text'][0]
+    )

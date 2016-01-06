@@ -56,7 +56,7 @@ def get_file_contents(path):
     return base64.b64decode(get_json(path)['content'])
 
 
-def get_claims_for_token(token):
+def get_claimfiles_for_token(token):
     """
     Gets an array of ipy notebooks, each with their own claim, that live inside
     the directory named after their project's token.
@@ -69,6 +69,13 @@ def get_claims_for_token(token):
     """
     return [i['name'] for i in get_json(token)
             if i['name'] not in config.IGNORE_FILES]
+
+
+def get_all_claims_and_results_for_token(token):
+    return [
+        get_claim_and_result_tuple(token, cfile)
+        for cfile in get_claimfiles_for_token(token)
+    ]
 
 
 def get_claim_and_result_tuple(token, claimfile):
@@ -85,6 +92,6 @@ def get_claim_and_result_tuple(token, claimfile):
     cells = json.loads(get_file_contents(token + "/" + claimfile))['cells']
 
     return (
-        cells[0]['source'][0],
-        cells[-1]['outputs'][0]['text'][0]
+        cells[0]['source'][0].strip(),
+        cells[-1]['outputs'][0]['text'][0].strip()
     )

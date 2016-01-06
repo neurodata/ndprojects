@@ -40,9 +40,28 @@ def get_json(path):
 
 
 def get_file_contents(path):
+    """
+    Gets the contents of a file specified by 'path'.
+
+    Arguments:
+        path (str): The path (no leading /) to the file
+
+    Returns:
+        str: The contents of the file.
+    """
     return base64.b64decode(get_json(path)['content'])
 
 
 def get_claims_for_token(token):
+    """
+    Gets an array of ipy notebooks, each with their own claim, that live inside
+    the directory named after their project's token.
+
+    Arguments:
+        token (str): The token to inspect
+
+    Returns:
+        str[]: A list of filenames, each representing a claim
+    """
     return [i['name'] for i in get_json(token)
             if i['name'] not in config.IGNORE_FILES]

@@ -5,13 +5,16 @@ import config
 import ndio.remote.OCP as OCP
 oo = OCP()
 
-tokens = oo.get_public_tokens()
+# Before running this, populate `config.py` with your own values.
 
 protocol = "https"
 base_url = "api.github.com"
 repo_name = "openconnectome/ndprojects"
 ref = "master"
 contents_path = "repos/{}/contents".format(repo_name)
+
+tokens = oo.get_public_tokens()
+
 
 def get_json(path):
     """
